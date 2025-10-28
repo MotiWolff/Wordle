@@ -1,10 +1,9 @@
 .App {
   text-align: center;
-    background-color: #121212;
-    width: 100vw;
-    height: 100vh;
-    /* display: flex; */
-    color: white;
+  background-color: #121212;
+  width: 100vw;
+  height: 100vh;
+  color: white;
   overflow-x: hidden;
 }
 
@@ -24,7 +23,7 @@ nav {
 
 nav h1 {
   margin: 0;
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: nyt-karnakcondensed, Georgia, serif;
   color: white;
   font-size: 45px;
 }
@@ -74,6 +73,24 @@ nav h1 {
     -moz-user-select: none;
     user-select: none;
     font-family: "nyt-franklin", Arial, Helvetica, sans-serif;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+  }
+
+  .letter.flip {
+    animation: flip 0.8s ease forwards;
+  }
+
+  @keyframes flip {
+    0% {
+      transform: rotateX(0deg);
+    }
+    50% {
+      transform: rotateX(90deg);
+    }
+    100% {
+      transform: rotateX(0deg);
+    }
   }
   
   #correct {
@@ -98,10 +115,9 @@ nav h1 {
     flex: 33%;
     display: flex;
     flex-direction: row;
-    display: flex;
     justify-content: center;
     margin: 5px;
-  width: 100%;
+    width: 100%;
 }
 
 .line2 {
@@ -147,3 +163,136 @@ nav h1 {
   #disabled {
     background-color: #3a393c;
   }
+
+.gameOver {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.gameOver-content {
+  background-color: #1a1a1b;
+  border-radius: 12px;
+  max-width: 500px;
+  width: 90%;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: nyt-karnakcondensed, Georgia, serif;
+}
+
+.gameOver-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.gameOver-icon-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gameOver-title {
+  margin: 0.5rem 0;
+  font-size: 2rem;
+  color: #fff;
+  font-weight: 700;
+  font-family: nyt-karnakcondensed, Georgia, serif;
+}
+
+.gameOver-subtitle {
+  margin: 0.5rem 0 2rem 0;
+  font-size: 1.125rem;
+  color: #d7dadc;
+  text-align: center;
+}
+
+.gameOver-subtitle strong {
+  color: #fff;
+  font-weight: 700;
+}
+
+.statistics {
+  width: 100%;
+  margin: 1rem 0 2rem 0;
+}
+
+.statistics-title {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #d7dadc;
+  letter-spacing: 0.5px;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.statistics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  text-align: center;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.stat-value {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: #d7dadc;
+  text-transform: capitalize;
+}
+
+.restart-btn {
+  width: 100%;
+  max-width: 300px;
+  margin-top: 1rem;
+  padding: 14px 24px;
+  font-size: 16px;
+  font-weight: 700;
+  background-color: #528d4e;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.restart-btn:hover {
+  background-color: #6aad66;
+}
+
+.restart-btn:active {
+  background-color: #457a42;
+}

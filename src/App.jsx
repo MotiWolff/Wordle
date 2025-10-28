@@ -1,83 +1,33 @@
 import "./App.css";
 import Board from "./components/Board";
 import Keyboard from "./components/Keyboard";
-import { useMemo, useState, useCallback, useEffect } from "react";
+import { useMemo } from "react";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-import { boardDefault, generateWordSet } from "./services/Words";
 import { AppContext } from "./contexts/AppContext";
 import GameOver from "./components/GameOver";
+import { useWordle } from "./hooks/useWordle";
 
 function App() {
-  const [board, setBoard] = useState(boardDefault);
-  const [currAttempt, setCurrAttempt] = useState({ attempt: 0, letterPos: 0 });
-  const [wordSet, setWordSet] = useState(new Set());
-  const [toast, setToast] = useState({
-    open: false,
-    message: "",
-  });
-  const [disabledLetters, setDisabledLetters] = useState([]);
-  const [gameOver, setGameOver] = useState({
-    gameOver: false,
-    guessedWord: false,
-  });
-  const [correctWord, setCorrectWord] = useState("");
-
-  useEffect(() => {
-    generateWordSet().then((words) => {
-      setWordSet(words.wordSet);
-      setCorrectWord(words.todaysWord.toUpperCase());
-    });
-  }, []);
-
-  const onSelectLetter = useCallback(
-    (keyVal) => {
-      if (currAttempt.letterPos > 4) return;
-      const newBoard = [...board];
-      newBoard[currAttempt.attempt][currAttempt.letterPos] = keyVal;
-      setBoard(newBoard);
-      setCurrAttempt({
-        ...currAttempt,
-        letterPos: currAttempt.letterPos + 1,
-      });
-    },
-    [board, currAttempt]
-  );
-
-  const onDelete = useCallback(() => {
-    if (currAttempt.letterPos === 0) return;
-    const newBoard = [...board];
-    newBoard[currAttempt.attempt][currAttempt.letterPos - 1] = "";
-    setBoard(newBoard);
-    setCurrAttempt({
-      ...currAttempt,
-      letterPos: currAttempt.letterPos - 1,
-    });
-  }, [board, currAttempt]);
-
-  const onEnter = useCallback(() => {
-    if (currAttempt.letterPos !== 5) return;
-
-    let currWord = "";
-    for (let i = 0; i < 5; i++) {
-      currWord += board[currAttempt.attempt][i];
-    }
-
-    if (wordSet.has(currWord.toLowerCase())) {
-      setCurrAttempt({ attempt: currAttempt.attempt + 1, letterPos: 0 });
-    } else {
-      setToast({ open: true, message: "Not in word list" });
-    }
-
-    if (currWord === correctWord) {
-      setGameOver({ gameOver: true, guessedWord: true });
-      return;
-    }
-
-    if (currAttempt.attempt === 5) {
-      setGameOver({ gameOver: true, guessedWord: false });
-    }
-  }, [currAttempt, board, wordSet, correctWord]);
+  const {
+    board,
+    setBoard,
+    currAttempt,
+    setCurrAttempt,
+    wordSet,
+    disabledLetters,
+    setDisabledLetters,
+    gameOver,
+    setGameOver,
+    correctWord,
+    toast,
+    setToast,
+    onSelectLetter,
+    onDelete,
+    onEnter,
+    onRestart,
+    statistics,
+  } = useWordle();
 
   const contextValue = useMemo(
     () => ({
@@ -88,23 +38,29 @@ function App() {
       onDelete,
       onSelectLetter,
       onEnter,
+      onRestart,
       correctWord,
       setDisabledLetters,
       disabledLetters,
       gameOver,
       setGameOver,
+      statistics,
     }),
     [
       board,
+      setBoard,
       currAttempt,
+      setCurrAttempt,
       onDelete,
       onSelectLetter,
       onEnter,
+      onRestart,
       correctWord,
       setDisabledLetters,
       disabledLetters,
       gameOver,
       setGameOver,
+      statistics,
     ]
   );
 
@@ -114,10 +70,20 @@ function App() {
         <h1>Wordle</h1>
       </nav>
       <AppContext.Provider value={contextValue}>
-        <div className="game">
-          <Board />
-          {gameOver.gameOver ? <GameOver /> : <Keyboard />}
-        </div>
+        {wordSet.size === 0 ? (
+          <div className="game">
+            <div
+              style={{ textAlign: "center", marginTop: "2rem", color: "#fff" }}
+            >
+              Loading...
+            </div>
+          </div>
+        ) : (
+            <div className="game">
+              <Board />
+              {gameOver.gameOver ? <GameOver /> : <Keyboard />}
+            </div>
+        )}
         <Snackbar
           open={toast.open}
           autoHideDuration={1500}

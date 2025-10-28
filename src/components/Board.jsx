@@ -1,50 +1,18 @@
 import Letter from "./Letter";
 
+const MAX_ATTEMPTS = 6;
+const WORD_LENGTH = 5;
+
 export default function Board() {
   return (
     <div className="board">
-      <div className="row">
-        <Letter attemptVal={0} letterPos={0} />
-        <Letter attemptVal={0} letterPos={1} />
-        <Letter attemptVal={0} letterPos={2} />
-        <Letter attemptVal={0} letterPos={3} />
-        <Letter attemptVal={0} letterPos={4} />
-      </div>
-      <div className="row">
-        <Letter attemptVal={1} letterPos={0} />
-        <Letter attemptVal={1} letterPos={1} />
-        <Letter attemptVal={1} letterPos={2} />
-        <Letter attemptVal={1} letterPos={3} />
-        <Letter attemptVal={1} letterPos={4} />
-      </div>
-      <div className="row">
-        <Letter attemptVal={2} letterPos={0} />
-        <Letter attemptVal={2} letterPos={1} />
-        <Letter attemptVal={2} letterPos={2} />
-        <Letter attemptVal={2} letterPos={3} />
-        <Letter attemptVal={2} letterPos={4} />
-      </div>
-      <div className="row">
-        <Letter attemptVal={3} letterPos={0} />
-        <Letter attemptVal={3} letterPos={1} />
-        <Letter attemptVal={3} letterPos={2} />
-        <Letter attemptVal={3} letterPos={3} />
-        <Letter attemptVal={3} letterPos={4} />
-      </div>
-      <div className="row">
-        <Letter attemptVal={4} letterPos={0} />
-        <Letter attemptVal={4} letterPos={1} />
-        <Letter attemptVal={4} letterPos={2} />
-        <Letter attemptVal={4} letterPos={3} />
-        <Letter attemptVal={4} letterPos={4} />
-      </div>
-      <div className="row">
-        <Letter attemptVal={5} letterPos={0} />
-        <Letter attemptVal={5} letterPos={1} />
-        <Letter attemptVal={5} letterPos={2} />
-        <Letter attemptVal={5} letterPos={3} />
-        <Letter attemptVal={5} letterPos={4} />
-      </div>
+      {Array.from({ length: MAX_ATTEMPTS }).map((_, attemptVal) => (
+        <div className="row" key={attemptVal}>
+          {Array.from({ length: WORD_LENGTH }).map((_, letterPos) => (
+            <Letter key={letterPos} attemptVal={attemptVal} letterPos={letterPos} />
+          ))}
+        </div>
+      ))}
     </div>
   );
 }
