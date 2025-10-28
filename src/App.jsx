@@ -88,8 +88,19 @@ function App() {
       onSelectLetter,
       onEnter,
       correctWord,
+      setDisabledLetters,
+      disabledLetters,
     }),
-    [board, currAttempt, onDelete, onSelectLetter, onEnter, correctWord]
+    [
+      board,
+      currAttempt,
+      onDelete,
+      onSelectLetter,
+      onEnter,
+      correctWord,
+      setDisabledLetters,
+      disabledLetters,
+    ]
   );
 
   return (
