@@ -6,6 +6,7 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { boardDefault, generateWordSet } from "./services/Words";
 import { AppContext } from "./contexts/AppContext";
+import GameOver from "./components/GameOver";
 
 function App() {
   const [board, setBoard] = useState(boardDefault);
@@ -14,15 +15,18 @@ function App() {
   const [toast, setToast] = useState({
     open: false,
     message: "",
-    severity: "warning",
   });
   const [disabledLetters, setDisabledLetters] = useState([]);
-
-  const correctWord = "RIGHT";
+  const [gameOver, setGameOver] = useState({
+    gameOver: false,
+    guessedWord: false,
+  });
+  const [correctWord, setCorrectWord] = useState("");
 
   useEffect(() => {
     generateWordSet().then((words) => {
       setWordSet(words.wordSet);
+      setCorrectWord(words.todaysWord.toUpperCase());
     });
   }, []);
 
@@ -62,21 +66,18 @@ function App() {
     if (wordSet.has(currWord.toLowerCase())) {
       setCurrAttempt({ attempt: currAttempt.attempt + 1, letterPos: 0 });
     } else {
-      setToast({
-        open: true,
-        message: "Not in word list",
-        severity: "warning",
-      });
+      setToast({ open: true, message: "Not in word list" });
     }
 
     if (currWord === correctWord) {
-      setToast({
-        open: true,
-        message: "You guessed right!",
-        severity: "success",
-      });
+      setGameOver({ gameOver: true, guessedWord: true });
+      return;
     }
-  }, [currAttempt, board, wordSet]);
+
+    if (currAttempt.attempt === 5) {
+      setGameOver({ gameOver: true, guessedWord: false });
+    }
+  }, [currAttempt, board, wordSet, correctWord]);
 
   const contextValue = useMemo(
     () => ({
@@ -90,6 +91,8 @@ function App() {
       correctWord,
       setDisabledLetters,
       disabledLetters,
+      gameOver,
+      setGameOver,
     }),
     [
       board,
@@ -100,6 +103,8 @@ function App() {
       correctWord,
       setDisabledLetters,
       disabledLetters,
+      gameOver,
+      setGameOver,
     ]
   );
 
@@ -111,23 +116,19 @@ function App() {
       <AppContext.Provider value={contextValue}>
         <div className="game">
           <Board />
-          <Keyboard />
+          {gameOver.gameOver ? <GameOver /> : <Keyboard />}
         </div>
         <Snackbar
           open={toast.open}
           autoHideDuration={1500}
-          onClose={() =>
-            setToast({ open: false, message: "", severity: toast.severity })
-          }
+          onClose={() => setToast({ open: false, message: "" })}
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
           <Alert
             elevation={0}
             variant="standard"
-            severity={toast.severity}
-            onClose={() =>
-              setToast({ open: false, message: "", severity: toast.severity })
-            }
+            severity="warning"
+            onClose={() => setToast({ open: false, message: "" })}
             sx={{
               fontWeight: 700,
               bgcolor: "#fff",
