@@ -1,6 +1,7 @@
 import "./App.css";
 import Board from "./components/Board";
 import Keyboard from "./components/Keyboard";
+import HelpButton from "./components/HelpButton";
 import { useMemo } from "react";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
@@ -68,6 +69,7 @@ function App() {
     <div className="App">
       <nav>
         <h1>Wordle</h1>
+        <HelpButton />
       </nav>
       <AppContext.Provider value={contextValue}>
         {wordSet.size === 0 ? (
