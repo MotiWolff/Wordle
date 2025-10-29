@@ -2,11 +2,17 @@ import BackspaceIcon from "@mui/icons-material/Backspace";
 import { AppContext } from "../contexts/AppContext";
 import { useContext } from "react";
 
-export default function Key({ keyVal, bigKey, deleteKey, disabled }) {
-  const id = bigKey ? "big" : undefined;
+// Single key (letter/enter/delete)
+export default function Key({ keyVal, bigKey, deleteKey, disabled, status }) {
+  const id = bigKey
+    ? "big"
+    : status || (disabled
+      ? "disabled"
+      : undefined);
   const className = `key${deleteKey ? " delete" : ""}`;
   const { onSelectLetter, onDelete, onEnter } = useContext(AppContext);
 
+  // Route click to the right action
   function selectLetter() {
     if (keyVal === "ENTER") {
       onEnter();
@@ -19,7 +25,7 @@ export default function Key({ keyVal, bigKey, deleteKey, disabled }) {
   return (
     <div
       className={className}
-      id={id ? "big" : disabled ? "disabled" : undefined}
+      id={id}
       onClick={selectLetter}
       tabIndex={0}
       onKeyDown={(e) => {
