@@ -58,18 +58,36 @@ export default function Keyboard() {
     <div className="keyboard">
       <div className="line1">
         {keys1.map((key) => {
-          return <Key key={key} keyVal={key} disabled={disabledLetters.includes(key)} />;
+          return (
+            <Key
+              key={key}
+              keyVal={key}
+              disabled={disabledLetters.includes(key)}
+            />
+          );
         })}
       </div>
       <div className="line2">
         {keys2.map((key) => {
-          return <Key key={key} keyVal={key} disabled={disabledLetters.includes(key)} />;
+          return (
+            <Key
+              key={key}
+              keyVal={key}
+              disabled={disabledLetters.includes(key)}
+            />
+          );
         })}
       </div>
       <div className="line3">
         <Key keyVal={"ENTER"} bigKey disabled={false} />
         {keys3.map((key) => {
-          return <Key key={key} keyVal={key} disabled={disabledLetters.includes(key)} />;
+          return (
+            <Key
+              key={key}
+              keyVal={key}
+              disabled={disabledLetters.includes(key)}
+            />
+          );
         })}
         <Key keyVal={"⌫"} bigKey deleteKey disabled={false} />
       </div>
