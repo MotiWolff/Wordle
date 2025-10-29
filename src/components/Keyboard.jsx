@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useContext, useMemo } from "react";
 import Key from "./Key";
 import { AppContext } from "../contexts/AppContext";
 
+// On-screen keyboard with physical key support
 export default function Keyboard() {
   const keys1 = useMemo(
     () => ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
@@ -12,9 +13,10 @@ export default function Keyboard() {
     []
   );
   const keys3 = useMemo(() => ["Z", "X", "C", "V", "B", "N", "M"], []);
-  const { onSelectLetter, onDelete, onEnter, disabledLetters } =
+  const { onSelectLetter, onDelete, onEnter, disabledLetters, keyColors } =
     useContext(AppContext);
 
+  // Map physical key presses to actions
   const handleKeyboard = useCallback(
     (event) => {
       const pressed = event.key.toUpperCase();
@@ -64,6 +66,7 @@ export default function Keyboard() {
               key={key}
               keyVal={key}
               disabled={disabledLetters.includes(key)}
+              status={keyColors[key]}
             />
           );
         })}
@@ -75,6 +78,7 @@ export default function Keyboard() {
               key={key}
               keyVal={key}
               disabled={disabledLetters.includes(key)}
+              status={keyColors[key]}
             />
           );
         })}
@@ -87,6 +91,7 @@ export default function Keyboard() {
               key={key}
               keyVal={key}
               disabled={disabledLetters.includes(key)}
+              status={keyColors[key]}
             />
           );
         })}
