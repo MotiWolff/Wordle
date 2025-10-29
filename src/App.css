@@ -17,8 +17,11 @@ nav {
   width: 100%;
   margin: 0;
   border-bottom: 1px solid grey;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 0 16px;
 }
 
 nav h1 {
@@ -26,6 +29,13 @@ nav h1 {
   font-family: nyt-karnakcondensed, Georgia, serif;
   color: white;
   font-size: 45px;
+}
+
+nav .help-container {
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .game {
@@ -163,6 +173,19 @@ nav h1 {
   #disabled {
     background-color: #3a393c;
   }
+
+.key#correct {
+  background-color: #528d4e;
+}
+
+.key#almost {
+  background-color: #b49f39;
+}
+
+.key#error {
+  background-color: #3a393c;
+}
+
 
 .gameOver {
   position: fixed;
