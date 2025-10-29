@@ -1,11 +1,13 @@
 import { useState, useCallback, useEffect } from "react";
 import { boardDefault, generateWordSet } from "../services/Words";
 
+// Central game state and logic
 export const useWordle = () => {
   const [board, setBoard] = useState(boardDefault);
   const [currAttempt, setCurrAttempt] = useState({ attempt: 0, letterPos: 0 });
   const [wordSet, setWordSet] = useState(new Set());
   const [disabledLetters, setDisabledLetters] = useState([]);
+  const [keyColors, setKeyColors] = useState({}); // keyboard letter status
   const [gameOver, setGameOver] = useState({
     gameOver: false,
     guessedWord: false,
@@ -29,7 +31,7 @@ export const useWordle = () => {
         };
   });
 
-  // Load initial word set
+  // Load word list and pick today's word
   useEffect(() => {
     generateWordSet()
       .then((words) => {
@@ -45,6 +47,7 @@ export const useWordle = () => {
       });
   }, []);
 
+  // Type a letter into the current row
   const onSelectLetter = useCallback(
     (keyVal) => {
       if (gameOver.gameOver) return;
@@ -60,6 +63,7 @@ export const useWordle = () => {
     [board, currAttempt, gameOver]
   );
 
+  // Backspace one letter
   const onDelete = useCallback(() => {
     if (gameOver.gameOver) return;
     if (currAttempt.letterPos === 0) return;
@@ -72,6 +76,7 @@ export const useWordle = () => {
     });
   }, [board, currAttempt, gameOver]);
 
+  // Submit the row
   const onEnter = useCallback(() => {
     if (gameOver.gameOver) return;
     if (currAttempt.letterPos !== 5) return;
@@ -82,7 +87,26 @@ export const useWordle = () => {
     }
 
     if (wordSet.has(currWord.toLowerCase())) {
-      // Advance the attempt so the submitted row reveals colors
+      // Update keyboard colors for this guess
+      const newKeyColors = { ...keyColors };
+      for (let i = 0; i < 5; i++) {
+        const letter = board[currAttempt.attempt][i];
+        const isCorrect = correctWord[i] === letter;
+        const isAlmost = !isCorrect && correctWord.includes(letter);
+
+        // Priority: correct > almost > error
+        // Only update if the new status is better than the current one
+        if (isCorrect) {
+          newKeyColors[letter] = "correct";
+        } else if (isAlmost && newKeyColors[letter] !== "correct") {
+          newKeyColors[letter] = "almost";
+        } else if (!newKeyColors[letter]) {
+          newKeyColors[letter] = "error";
+        }
+      }
+      setKeyColors(newKeyColors);
+
+      // Advance so the submitted row reveals colors
       const nextAttempt = { attempt: currAttempt.attempt + 1, letterPos: 0 };
       if (currWord === correctWord) {
         setCurrAttempt(nextAttempt);
@@ -124,12 +148,14 @@ export const useWordle = () => {
     } else {
       setToast({ open: true, message: "Not in word list" });
     }
-  }, [currAttempt, board, wordSet, correctWord, gameOver]);
+  }, [currAttempt, board, wordSet, correctWord, gameOver, keyColors]);
 
+  // Start a new game
   const onRestart = useCallback(() => {
     setBoard(boardDefault);
     setCurrAttempt({ attempt: 0, letterPos: 0 });
     setDisabledLetters([]);
+    setKeyColors({});
     setGameOver({ gameOver: false, guessedWord: false });
 
     generateWordSet()
@@ -154,6 +180,7 @@ export const useWordle = () => {
     wordSet,
     disabledLetters,
     setDisabledLetters,
+    keyColors,
     gameOver,
     setGameOver,
     correctWord,
