@@ -12,7 +12,8 @@ export default function Keyboard() {
     []
   );
   const keys3 = useMemo(() => ["Z", "X", "C", "V", "B", "N", "M"], []);
-  const { onSelectLetter, onDelete, onEnter, disabledLetters } = useContext(AppContext);
+  const { onSelectLetter, onDelete, onEnter, disabledLetters } =
+    useContext(AppContext);
 
   const handleKeyboard = useCallback(
     (event) => {

@@ -18,13 +18,15 @@ export const useWordle = () => {
 
   // Statistics state - load from localStorage
   const [statistics, setStatistics] = useState(() => {
-    const saved = localStorage.getItem('wordleStats');
-    return saved ? JSON.parse(saved) : {
-      gamesPlayed: 0,
-      gamesWon: 0,
-      currentStreak: 0,
-      maxStreak: 0,
-    };
+    const saved = localStorage.getItem("wordleStats");
+    return saved
+      ? JSON.parse(saved)
+      : {
+          gamesPlayed: 0,
+          gamesWon: 0,
+          currentStreak: 0,
+          maxStreak: 0,
+        };
   });
 
   // Load initial word set
@@ -94,7 +96,7 @@ export const useWordle = () => {
             currentStreak: prev.currentStreak + 1,
             maxStreak: Math.max(prev.maxStreak, prev.currentStreak + 1),
           };
-          localStorage.setItem('wordleStats', JSON.stringify(newStats));
+          localStorage.setItem("wordleStats", JSON.stringify(newStats));
           return newStats;
         });
         return;
@@ -112,7 +114,7 @@ export const useWordle = () => {
             currentStreak: 0,
             maxStreak: prev.maxStreak,
           };
-          localStorage.setItem('wordleStats', JSON.stringify(newStats));
+          localStorage.setItem("wordleStats", JSON.stringify(newStats));
           return newStats;
         });
         return;
