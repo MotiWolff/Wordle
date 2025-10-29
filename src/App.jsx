@@ -9,6 +9,7 @@ import { AppContext } from "./contexts/AppContext";
 import GameOver from "./components/GameOver";
 import { useWordle } from "./hooks/useWordle";
 
+// Root component: provides context and renders game UI
 function App() {
   const {
     board,
@@ -18,6 +19,7 @@ function App() {
     wordSet,
     disabledLetters,
     setDisabledLetters,
+    keyColors,
     gameOver,
     setGameOver,
     correctWord,
@@ -30,6 +32,7 @@ function App() {
     statistics,
   } = useWordle();
 
+  // Memoize context to keep stable references
   const contextValue = useMemo(
     () => ({
       board,
@@ -43,6 +46,7 @@ function App() {
       correctWord,
       setDisabledLetters,
       disabledLetters,
+      keyColors,
       gameOver,
       setGameOver,
       statistics,
@@ -59,6 +63,7 @@ function App() {
       correctWord,
       setDisabledLetters,
       disabledLetters,
+      keyColors,
       gameOver,
       setGameOver,
       statistics,
