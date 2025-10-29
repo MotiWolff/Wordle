@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { AppContext } from "../contexts/AppContext";
 
+// End screen showing result and stats snippet
 export default function GameOver() {
   const { gameOver, currAttempt, correctWord, onRestart, statistics } = useContext(AppContext);
 

@@ -1,8 +1,9 @@
 import Letter from "./Letter";
 
-const MAX_ATTEMPTS = 6;
-const WORD_LENGTH = 5;
+const MAX_ATTEMPTS = 6; // rows
+const WORD_LENGTH = 5;  // cols
 
+// Grid of tiles (6x5)
 export default function Board() {
   return (
     <div className="board">
