@@ -1,16 +1,77 @@
-# React + Vite
+# Wordle (React)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[![Node.js](https://img.shields.io/badge/node-%3E=18.0.0-brightgreen?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-Currently, two official plugins are available:
+A polished, open‑source Wordle clone built with React and Vite. Includes responsive layout, on‑screen and physical keyboard input, flip/color animations, invalid‑word feedback, and an end‑game screen with basic stats.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Demo
+<!-- If you have a screenshot, add it here -->
+<!-- ![Gameplay](demo.png) -->
+TODO: add gameplay screenshot
 
-## React Compiler
+## Features
+- Wordle gameplay (6 tries, 5‑letter words)
+- Tile flip and color reveal animations
+- Physical keyboard and on‑screen keyboard
+- Disabled/colored keyboard keys as you guess
+- Snackbar warnings for invalid words
+- Game Over screen (win/lose, attempts, restart)
+- Simple stats persisted to localStorage (WIP)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
+- React (Vite)
+- JavaScript/JSX
+- Material UI (Snackbar, icons)
+- Custom CSS
+- ESLint/Prettier
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1) Install dependencies
+```
+npm install
+```
+
+2) Run the dev server
+```
+npm run dev
+```
+Open http://localhost:5173
+
+3) Build for production
+```
+npm run build
+```
+
+4) Preview production build
+```
+npm run preview
+```
+
+## Project Structure
+```
+src/
+  components/        # Board, Keyboard, Key, Letter, Help, GameOver
+  contexts/          # AppContext provider
+  hooks/             # useWordle (game state & logic)
+  services/          # Words loader (word list & today’s word)
+  App.jsx / App.css  # Root UI and styles
+public/
+README.md
+```
+
+## How to Play
+- Guess the 5‑letter word in 6 tries.
+- Each guess must be a valid word.
+- Colors after submit:
+  - Green: letter in the correct spot
+  - Yellow: letter in the word, wrong spot
+  - Gray: letter not in the word
+
+## Credits / Collaborators
+<!-- Add names and links as desired -->
+<!-- Example: Moti Wolff ([@MotiWolff](https://github.com/MotiWolff)) -->
+
+## License
+MIT. See [LICENSE](LICENSE).
