@@ -1,4 +1,6 @@
-import wordBank from "../wordle-bank.txt";
+import englishWordBank from "../wordle-bank.txt";
+import hebrewWordBank from "../hebrew-wordle-bank.txt";
+
 export const boardDefault = [
   ["", "", "", "", ""],
   ["", "", "", "", ""],
@@ -8,11 +10,12 @@ export const boardDefault = [
   ["", "", "", "", ""],
 ];
 
-export const generateWordSet = async () => {
+export const generateWordSet = async (language = "english") => {
   let wordSet;
   let todaysWord;
 
   try {
+    const wordBank = language === "hebrew" ? hebrewWordBank : englishWordBank;
     const response = await fetch(wordBank);
 
     if (!response.ok) {

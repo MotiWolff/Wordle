@@ -1,0 +1,25 @@
+.language-button {
+  background: none;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.language-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.language-button svg {
+  width: 28px;
+  height: 28px;
+}
+
+.language-button svg path {
+  stroke: #ffffff !important;
+}

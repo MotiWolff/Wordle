@@ -2,6 +2,7 @@ import "./App.css";
 import Board from "./components/Board";
 import Keyboard from "./components/Keyboard";
 import HelpButton from "./components/HelpButton";
+import LanguageSelector from "./components/LanguageSelector";
 import { useMemo } from "react";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
@@ -30,6 +31,8 @@ function App() {
     onEnter,
     onRestart,
     statistics,
+    language,
+    setLanguage,
   } = useWordle();
 
   // Memoize context to keep stable references
@@ -50,6 +53,8 @@ function App() {
       gameOver,
       setGameOver,
       statistics,
+      language,
+      setLanguage,
     }),
     [
       board,
@@ -67,16 +72,21 @@ function App() {
       gameOver,
       setGameOver,
       statistics,
+      language,
+      setLanguage,
     ]
   );
 
   return (
     <div className="App">
-      <nav>
-        <h1>Wordle</h1>
-        <HelpButton />
-      </nav>
       <AppContext.Provider value={contextValue}>
+        <nav>
+          <h1>Wordle</h1>
+          <div className="nav-buttons">
+            <LanguageSelector />
+            <HelpButton />
+          </div>
+        </nav>
         {wordSet.size === 0 ? (
           <div className="game">
             <div

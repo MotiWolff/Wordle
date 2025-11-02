@@ -4,13 +4,15 @@ import { AppContext } from "../contexts/AppContext";
 
 // A single tile on the board
 export default function Letter({ letterPos, attemptVal }) {
-  const { board, correctWord, currAttempt, setDisabledLetters } =
+  const { board, correctWord, currAttempt, setDisabledLetters, language } =
     useContext(AppContext);
   const letter = board[attemptVal][letterPos];
   const [flip, setFlip] = useState(false);
   const [revealColor, setRevealColor] = useState(false);
 
-  const correct = correctWord[letterPos] === letter;
+  // For Hebrew, compare with reversed position since board is RTL but correctWord is LTR
+  const correctWordIndex = language === "hebrew" ? 4 - letterPos : letterPos;
+  const correct = correctWord[correctWordIndex] === letter;
   const almost = !correct && letter !== "" && correctWord.includes(letter);
 
   const letterState =

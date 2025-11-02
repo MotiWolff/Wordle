@@ -3,6 +3,7 @@ import { boardDefault, generateWordSet } from "../services/Words";
 
 // Central game state and logic
 export const useWordle = () => {
+  const [language, setLanguage] = useState("english");
   const [board, setBoard] = useState(boardDefault);
   const [currAttempt, setCurrAttempt] = useState({ attempt: 0, letterPos: 0 });
   const [wordSet, setWordSet] = useState(new Set());
@@ -33,7 +34,7 @@ export const useWordle = () => {
 
   // Load word list and pick today's word
   useEffect(() => {
-    generateWordSet()
+    generateWordSet(language)
       .then((words) => {
         setWordSet(words.wordSet);
         setCorrectWord(words.todaysWord.toUpperCase());
@@ -45,7 +46,7 @@ export const useWordle = () => {
           message: "Failed to load word list. Please refresh the page.",
         });
       });
-  }, []);
+  }, [language]);
 
   // Type a letter into the current row
   const onSelectLetter = useCallback(
@@ -53,14 +54,21 @@ export const useWordle = () => {
       if (gameOver.gameOver) return;
       if (currAttempt.letterPos > 4) return;
       const newBoard = board.map((row) => [...row]);
-      newBoard[currAttempt.attempt][currAttempt.letterPos] = keyVal;
+
+      // For Hebrew, fill from right to left (position 4 -> 0)
+      const actualPos =
+        language === "hebrew"
+          ? 4 - currAttempt.letterPos
+          : currAttempt.letterPos;
+
+      newBoard[currAttempt.attempt][actualPos] = keyVal;
       setBoard(newBoard);
       setCurrAttempt({
         ...currAttempt,
         letterPos: currAttempt.letterPos + 1,
       });
     },
-    [board, currAttempt, gameOver]
+    [board, currAttempt, gameOver, language]
   );
 
   // Backspace one letter
@@ -68,29 +76,44 @@ export const useWordle = () => {
     if (gameOver.gameOver) return;
     if (currAttempt.letterPos === 0) return;
     const newBoard = board.map((row) => [...row]);
-    newBoard[currAttempt.attempt][currAttempt.letterPos - 1] = "";
+
+    // For Hebrew, delete from right to left
+    const actualPos =
+      language === "hebrew"
+        ? 4 - (currAttempt.letterPos - 1)
+        : currAttempt.letterPos - 1;
+
+    newBoard[currAttempt.attempt][actualPos] = "";
     setBoard(newBoard);
     setCurrAttempt({
       ...currAttempt,
       letterPos: currAttempt.letterPos - 1,
     });
-  }, [board, currAttempt, gameOver]);
+  }, [board, currAttempt, gameOver, language]);
 
   // Submit the row
   const onEnter = useCallback(() => {
     if (gameOver.gameOver) return;
     if (currAttempt.letterPos !== 5) return;
 
+    // Build the word from the board
     let currWord = "";
     for (let i = 0; i < 5; i++) {
       currWord += board[currAttempt.attempt][i];
     }
 
+    // For Hebrew, reverse the word to match the actual reading order
+    if (language === "hebrew") {
+      currWord = currWord.split("").reverse().join("");
+    }
+
     if (wordSet.has(currWord.toLowerCase())) {
       // Update keyboard colors for this guess
       const newKeyColors = { ...keyColors };
+
+      // Compare each character in the actual word (currWord) with correctWord
       for (let i = 0; i < 5; i++) {
-        const letter = board[currAttempt.attempt][i];
+        const letter = currWord[i];
         const isCorrect = correctWord[i] === letter;
         const isAlmost = !isCorrect && correctWord.includes(letter);
 
@@ -148,29 +171,46 @@ export const useWordle = () => {
     } else {
       setToast({ open: true, message: "Not in word list" });
     }
-  }, [currAttempt, board, wordSet, correctWord, gameOver, keyColors]);
+  }, [
+    gameOver.gameOver,
+    currAttempt.letterPos,
+    currAttempt.attempt,
+    language,
+    wordSet,
+    board,
+    keyColors,
+    correctWord,
+  ]);
 
   // Start a new game
-  const onRestart = useCallback(() => {
-    setBoard(boardDefault);
-    setCurrAttempt({ attempt: 0, letterPos: 0 });
-    setDisabledLetters([]);
-    setKeyColors({});
-    setGameOver({ gameOver: false, guessedWord: false });
+  const onRestart = useCallback(
+    (newLanguage) => {
+      setBoard(boardDefault);
+      setCurrAttempt({ attempt: 0, letterPos: 0 });
+      setDisabledLetters([]);
+      setKeyColors({});
+      setGameOver({ gameOver: false, guessedWord: false });
 
-    generateWordSet()
-      .then((words) => {
-        setWordSet(words.wordSet);
-        setCorrectWord(words.todaysWord.toUpperCase());
-      })
-      .catch((error) => {
-        console.error("Failed to load word list:", error);
-        setToast({
-          open: true,
-          message: "Failed to load word list. Please refresh the page.",
+      const langToUse = newLanguage || language;
+      if (newLanguage && newLanguage !== language) {
+        setLanguage(newLanguage);
+      }
+
+      generateWordSet(langToUse)
+        .then((words) => {
+          setWordSet(words.wordSet);
+          setCorrectWord(words.todaysWord.toUpperCase());
+        })
+        .catch((error) => {
+          console.error("Failed to load word list:", error);
+          setToast({
+            open: true,
+            message: "Failed to load word list. Please refresh the page.",
+          });
         });
-      });
-  }, []);
+    },
+    [language]
+  );
 
   return {
     board,
@@ -191,5 +231,7 @@ export const useWordle = () => {
     onEnter,
     onRestart,
     statistics,
+    language,
+    setLanguage,
   };
 };
