@@ -45,21 +45,24 @@ export default function Letter({ letterPos, attemptVal }) {
   // Trigger flip animation when row is submitted
   useEffect(() => {
     if (currAttempt.attempt === attemptVal + 1 && letter !== "") {
+      // For Hebrew, flip from right to left (reverse the delay)
+      const animationPos = language === "hebrew" ? 4 - letterPos : letterPos;
+
       const flipTimer = setTimeout(() => {
         setFlip(true);
-      }, letterPos * 250); // Stagger each letter by 250ms
+      }, animationPos * 250); // Stagger each letter by 250ms
 
       // Reveal color at 50% of flip animation (400ms after flip starts)
       const colorTimer = setTimeout(() => {
         setRevealColor(true);
-      }, letterPos * 250 + 400);
+      }, animationPos * 250 + 400);
 
       return () => {
         clearTimeout(flipTimer);
         clearTimeout(colorTimer);
       };
     }
-  }, [currAttempt.attempt, attemptVal, letterPos, letter]);
+  }, [currAttempt.attempt, attemptVal, letterPos, letter, language]);
 
   return (
     <div className={`letter ${flip ? "flip" : ""}`} id={letterState}>
