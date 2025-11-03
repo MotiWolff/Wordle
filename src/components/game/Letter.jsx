@@ -1,6 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import { AppContext } from "../contexts/AppContext";
+import React, { useContext, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { AppContext } from '@contexts/AppContext';
+import {
+  getLetterAnimationDelay,
+  getColorRevealDelay,
+} from '@utils/animations';
 
 // A single tile on the board
 export default function Letter({ letterPos, attemptVal }) {
@@ -50,12 +54,12 @@ export default function Letter({ letterPos, attemptVal }) {
 
       const flipTimer = setTimeout(() => {
         setFlip(true);
-      }, animationPos * 250); // Stagger each letter by 250ms
+      }, getLetterAnimationDelay(animationPos));
 
-      // Reveal color at 50% of flip animation (400ms after flip starts)
+      // Reveal color at 50% of flip animation
       const colorTimer = setTimeout(() => {
         setRevealColor(true);
-      }, animationPos * 250 + 400);
+      }, getColorRevealDelay(animationPos));
 
       return () => {
         clearTimeout(flipTimer);
