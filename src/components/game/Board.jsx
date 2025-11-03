@@ -1,9 +1,7 @@
-import { useContext } from "react";
-import Letter from "./Letter";
-import { AppContext } from "../contexts/AppContext";
-
-const MAX_ATTEMPTS = 6; // rows
-const WORD_LENGTH = 5; // cols
+import { useContext } from 'react';
+import Letter from './Letter';
+import { AppContext } from '@contexts/AppContext';
+import { MAX_ATTEMPTS, WORD_LENGTH } from '@constants/gameConstants';
 
 // Grid of tiles (6x5)
 export default function Board() {

@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useContext, useMemo } from "react";
-import Key from "./Key";
-import { AppContext } from "../contexts/AppContext";
+import React, { useCallback, useEffect, useContext } from 'react';
+import Key from './Key';
+import { AppContext } from '@contexts/AppContext';
+import { getKeyboardLayout } from '@constants/keyboardLayouts';
 
 // On-screen keyboard with physical key support
 export default function Keyboard() {
@@ -13,44 +14,25 @@ export default function Keyboard() {
     language,
   } = useContext(AppContext);
 
-  // English keyboard layout
-  const englishKeys1 = useMemo(
-    () => ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
-    []
-  );
-  const englishKeys2 = useMemo(
-    () => ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
-    []
-  );
-  const englishKeys3 = useMemo(() => ["Z", "X", "C", "V", "B", "N", "M"], []);
-
-  // Hebrew keyboard layout (matching standard Hebrew keyboard)
-  const hebrewKeys1 = useMemo(() => ["ק", "ר", "א", "ט", "ו", "י", "פ"], []);
-  const hebrewKeys2 = useMemo(
-    () => ["ש", "ד", "ג", "כ", "ע", "י", "ח", "ל"],
-    []
-  );
-  const hebrewKeys3 = useMemo(
-    () => ["ז", "ס", "ב", "ה", "נ", "מ", "צ", "ת"],
-    []
-  );
-
-  // Select keys based on language
-  const keys1 = language === "hebrew" ? hebrewKeys1 : englishKeys1;
-  const keys2 = language === "hebrew" ? hebrewKeys2 : englishKeys2;
-  const keys3 = language === "hebrew" ? hebrewKeys3 : englishKeys3;
+  // Get keyboard layout based on language
+  const layout = getKeyboardLayout(language);
+  const keys1 = layout.row1;
+  const keys2 = layout.row2;
+  const keys3 = layout.row3;
 
   // Map physical key presses to actions
   const handleKeyboard = useCallback(
     (event) => {
       const key = event.key;
-      const pressed = language === "hebrew" ? key : key.toUpperCase();
+      const pressed = language === 'hebrew' ? key : key.toUpperCase();
 
-      if (key === "Enter") {
+      if (key === 'Enter') {
+        event.preventDefault(); // Prevent page reload
         onEnter();
         return;
       }
-      if (key === "Backspace") {
+      if (key === 'Backspace') {
+        event.preventDefault(); // Prevent browser back navigation
         onDelete();
         return;
       }

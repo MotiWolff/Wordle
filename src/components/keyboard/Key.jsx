@@ -1,5 +1,5 @@
 import BackspaceIcon from "@mui/icons-material/Backspace";
-import { AppContext } from "../contexts/AppContext";
+import { AppContext } from "@contexts/AppContext";
 import { useContext } from "react";
 
 // Single key (letter/enter/delete)

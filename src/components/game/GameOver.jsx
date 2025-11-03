@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { AppContext } from "../contexts/AppContext";
+import { AppContext } from "@contexts/AppContext";
 
 // End screen showing result and stats snippet
 export default function GameOver() {

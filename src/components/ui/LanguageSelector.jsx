@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { AppContext } from "../contexts/AppContext";
+import { AppContext } from "@contexts/AppContext";
 import "./LanguageSelector.css";
 
 export default function LanguageSelector() {
