@@ -21,15 +21,33 @@ export const useWordle = () => {
 
   // Statistics state - load from localStorage
   const [statistics, setStatistics] = useState(() => {
-    const saved = localStorage.getItem("wordleStats");
-    return saved
-      ? JSON.parse(saved)
-      : {
-          gamesPlayed: 0,
-          gamesWon: 0,
-          currentStreak: 0,
-          maxStreak: 0,
-        };
+    const defaultStats = {
+      gamesPlayed: 0,
+      gamesWon: 0,
+      currentStreak: 0,
+      maxStreak: 0,
+      guessDistribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 },
+      gameHistory: [],
+      firstGameDate: null,
+    };
+
+    try {
+      const saved = localStorage.getItem("wordleStats");
+      if (!saved) return defaultStats;
+
+      const parsed = JSON.parse(saved);
+
+      // Merge with defaults to ensure all new fields exist
+      return {
+        ...defaultStats,
+        ...parsed,
+        guessDistribution: parsed.guessDistribution || defaultStats.guessDistribution,
+        gameHistory: parsed.gameHistory || defaultStats.gameHistory,
+      };
+    } catch (error) {
+      console.error("Error loading statistics:", error);
+      return defaultStats;
+    }
   });
 
   // Load word list and pick today's word
@@ -137,11 +155,27 @@ export const useWordle = () => {
 
         // Update statistics for a win
         setStatistics((prev) => {
+          const guessCount = currAttempt.attempt + 1;
+          const newGuessDistribution = { ...prev.guessDistribution };
+          newGuessDistribution[guessCount] = (newGuessDistribution[guessCount] || 0) + 1;
+
           const newStats = {
             gamesPlayed: prev.gamesPlayed + 1,
             gamesWon: prev.gamesWon + 1,
             currentStreak: prev.currentStreak + 1,
             maxStreak: Math.max(prev.maxStreak, prev.currentStreak + 1),
+            guessDistribution: newGuessDistribution,
+            gameHistory: [
+              ...(prev.gameHistory || []),
+              {
+                date: new Date().toISOString(),
+                word: correctWord,
+                guesses: guessCount,
+                won: true,
+                language: language,
+              },
+            ],
+            firstGameDate: prev.firstGameDate || new Date().toISOString(),
           };
           localStorage.setItem("wordleStats", JSON.stringify(newStats));
           return newStats;
@@ -160,6 +194,18 @@ export const useWordle = () => {
             gamesWon: prev.gamesWon,
             currentStreak: 0,
             maxStreak: prev.maxStreak,
+            guessDistribution: prev.guessDistribution,
+            gameHistory: [
+              ...(prev.gameHistory || []),
+              {
+                date: new Date().toISOString(),
+                word: correctWord,
+                guesses: 6,
+                won: false,
+                language: language,
+              },
+            ],
+            firstGameDate: prev.firstGameDate || new Date().toISOString(),
           };
           localStorage.setItem("wordleStats", JSON.stringify(newStats));
           return newStats;

@@ -3,6 +3,7 @@ import Board from "./components/Board";
 import Keyboard from "./components/Keyboard";
 import HelpButton from "./components/HelpButton";
 import LanguageSelector from "./components/LanguageSelector";
+import LeaderboardButton from "./components/LeaderboardButton";
 import { useMemo } from "react";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
@@ -84,6 +85,7 @@ function App() {
           <h1>Wordle</h1>
           <div className="nav-buttons">
             <LanguageSelector />
+            <LeaderboardButton />
             <HelpButton />
           </div>
         </nav>

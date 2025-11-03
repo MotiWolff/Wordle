@@ -1,0 +1,156 @@
+.leaderboard-container {
+  position: relative;
+  display: inline-block;
+}
+
+.leaderboard-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  background-color: #121213;
+  border: 1px solid #3a3a3c;
+  border-radius: 8px;
+  width: 420px;
+  max-width: 90vw;
+  max-height: 80vh;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  animation: slideDown 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.leaderboard-header {
+  padding: 24px 24px 20px 24px;
+  text-align: center;
+}
+
+.leaderboard-header h2 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.leaderboard-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 24px 24px 24px;
+}
+
+.section-title {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #d7dadc;
+  letter-spacing: 0.5px;
+  margin: 1.5rem 0 0.875rem 0;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.guess-distribution {
+  margin-top: 1.5rem;
+}
+
+.distribution-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.distribution-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.distribution-label {
+  width: 12px;
+  text-align: center;
+  color: #d7dadc;
+  font-weight: 400;
+  font-size: 0.875rem;
+}
+
+.distribution-bar-container {
+  flex: 1;
+  position: relative;
+}
+
+.distribution-bar {
+  height: 20px;
+  background-color: #3a3a3c;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 4px;
+  min-width: 20px;
+  transition: all 0.2s ease;
+}
+
+.distribution-count {
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.no-data {
+  text-align: center;
+  color: #818384;
+  padding: 1rem 0;
+  font-size: 0.875rem;
+}
+
+.icon-button {
+  background: none;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.icon-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.icon-button img {
+  width: 28px;
+  height: 28px;
+}
+
+@media (max-width: 500px) {
+  .leaderboard-dropdown {
+    width: 95vw;
+  }
+
+  .statistics-grid {
+    gap: 0.5rem;
+  }
+
+  .stat-value {
+    font-size: 1.75rem;
+  }
+
+  .stat-label {
+    font-size: 0.625rem;
+  }
+}
